@@ -1,0 +1,1 @@
+Error occurred: 'PngImageFile' object has no attribute 'getKeepWithNext'

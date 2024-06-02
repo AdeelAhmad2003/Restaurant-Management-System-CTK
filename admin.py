@@ -5,6 +5,9 @@ import customtkinter as ctk
 from tkinter import ttk
 import pyodbc
 from menu import MenuFile
+from employee import employeeFile
+from inventory import inventoryFile
+from sales import salesFile
 
 class MainApp:
     def __init__(self, connection):
@@ -40,13 +43,13 @@ class MainApp:
         employee_img_data = Image.open("employees.png")
         employee_img = CTkImage(dark_image=employee_img_data, light_image=employee_img_data, size=(100, 100))
 
-        employee = CTkButton(master=button_frame, image=employee_img, text="Employee Management", fg_color="transparent", font=("Arial Bold", 25), hover_color="#207244", anchor="center")
+        employee = CTkButton(master=button_frame, image=employee_img, text="Employee Management", fg_color="transparent", font=("Arial Bold", 25), hover_color="#207244", anchor="center",command=self.open_employee)
         employee.pack(side='left', padx=10)
 
         inventory_img_data = Image.open("inventory_1.png")
         inventory_img = CTkImage(dark_image=inventory_img_data, light_image=inventory_img_data, size=(100, 100))
 
-        inventory = CTkButton(master=button_frame, image=inventory_img, text="Inventory Management", fg_color="transparent", font=("Arial Bold", 25), hover_color="#207244", anchor="center")
+        inventory = CTkButton(master=button_frame, image=inventory_img, text="Inventory Management", fg_color="transparent", font=("Arial Bold", 25), hover_color="#207244", anchor="center",command=self.open_inventory)
         inventory.pack(side='left', padx=10)
 
         # Create a new frame for the "Sales and Reports" button to place it on the next line
@@ -56,12 +59,27 @@ class MainApp:
         sales_img_data = Image.open("sales.png")
         sales_img = CTkImage(dark_image=sales_img_data, light_image=sales_img_data, size=(100, 100))
 
-        sales = CTkButton(master=sales_button_frame, image=sales_img, text="Sales and Reports", fg_color="transparent", font=("Arial Bold", 25), hover_color="#207244", anchor="center")
+        sales = CTkButton(master=sales_button_frame, image=sales_img, text="Sales and Reports", fg_color="transparent", font=("Arial Bold", 25), hover_color="#207244", anchor="center",command=self.open_sales)
         sales.pack()
 
     def open_menu(self):
         self.app.destroy()  # Destroy the current window
         MenuFile()  # Call the menu function
+        exit(0)
+
+    def open_employee(self):
+        self.app.destroy()
+        employeeFile()
+        exit(0)
+    
+    def open_inventory(self):
+        self.app.destroy()
+        inventoryFile()
+        exit(0)
+
+    def open_sales(self):
+        self.app.destroy()
+        salesFile()
         exit(0)
 
     def run(self):

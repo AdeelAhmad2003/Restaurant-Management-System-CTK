@@ -2,6 +2,7 @@ from customtkinter import *
 from PIL import Image
 import pyodbc
 from tkinter import messagebox
+from user import user_file 
 
 class DatabaseManager:
     def __init__(self, server, database, driver='SQL Server'):
@@ -77,6 +78,9 @@ class LoginPage:
         user_data = self.db_manager.find_user(username, password)
         if user_data:
             messagebox.showinfo("Login", "User Login Successful")
+            self.root.destroy()
+            user_file()
+
         else:
             admin_data = self.db_manager.find_admin(username, password)
             if admin_data:
@@ -85,7 +89,7 @@ class LoginPage:
                 messagebox.showerror("Login", "Invalid Username or Password")
 
 def main():
-    server = 'DESKTOP-8RO21S6\SQLEXPRESS'
+    server = 'DESKTOP-DTNJB1H\SQLEXPRESS'
     database = 'tastytrack'
 
     db_manager = DatabaseManager(server, database)

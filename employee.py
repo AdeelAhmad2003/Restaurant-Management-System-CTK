@@ -306,7 +306,7 @@ def connect_to_database(server, database):
         return None
 
 if __name__ == "__main__":
-    server = 'DESKTOP-8RO21S6\SQLEXPRESS'
+    server = 'DESKTOP-DTNJB1H\SQLEXPRESS'
     database = 'tastytrack'
 
     # Establish the database connection

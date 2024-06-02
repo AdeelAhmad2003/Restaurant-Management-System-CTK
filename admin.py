@@ -4,54 +4,68 @@ from PIL import Image
 import customtkinter as ctk
 from tkinter import ttk
 import pyodbc
+from menu import MenuFile
 
-app = CTk()
-app.geometry("1200x670")
-app.resizable(0, 0)
+class MainApp:
+    def __init__(self, connection):
+        self.connection = connection
+        self.app = CTk()
+        self.app.geometry("1200x670")
+        self.app.resizable(0, 0)
+        set_appearance_mode("light")
 
-set_appearance_mode("light")
+        self.main_frame = CTkFrame(master=self.app, fg_color="#2A8C55", width=1200, height=670, corner_radius=0)
+        self.main_frame.pack_propagate(0)
+        self.main_frame.pack(fill="y", anchor="w", side="left")
 
-main_frame = CTkFrame(master=app, fg_color="#2A8C55", width=1200, height=670, corner_radius=0)
-main_frame.pack_propagate(0)
-main_frame.pack(fill="y", anchor="w", side="left")
+        self.setup_ui()
 
-logo_img_data = Image.open("logo.png")
-logo_img = CTkImage(dark_image=logo_img_data, light_image=logo_img_data, size=(77.68, 85.42))
+    def setup_ui(self):
+        logo_img_data = Image.open("logo.png")
+        logo_img = CTkImage(dark_image=logo_img_data, light_image=logo_img_data, size=(77.68, 85.42))
 
-label1 = CTkLabel(master=main_frame, text="Welcome!!!", text_color="#eee", fg_color="transparent", font=("Arial Bold", 25), anchor="w")
-label1.pack(pady=(38, 10), anchor="n")
+        label1 = CTkLabel(master=self.main_frame, text="Welcome!!!", text_color="#eee", fg_color="transparent", font=("Arial Bold", 25), anchor="w")
+        label1.pack(pady=(38, 10), anchor="n")
 
-# Create a frame to hold the buttons and ensure they are aligned properly
-button_frame = CTkFrame(master=main_frame, fg_color="transparent")
-button_frame.pack(pady=(50, 10), anchor="center")  # Increased top padding
+        # Create a frame to hold the buttons and ensure they are aligned properly
+        button_frame = CTkFrame(master=self.main_frame, fg_color="transparent")
+        button_frame.pack(pady=(50, 10), anchor="center")  # Increased top padding
 
-menu_img_data = Image.open("menu.png")
-menu_img = CTkImage(dark_image=menu_img_data, light_image=menu_img_data, size=(100, 100))
+        menu_img_data = Image.open("menu.png")
+        menu_img = CTkImage(dark_image=menu_img_data, light_image=menu_img_data, size=(100, 100))
 
-menu = CTkButton(master=button_frame, image=menu_img, text="Menu Management", fg_color="transparent", font=("Arial Bold", 25), hover_color="#207244", anchor="center")
-menu.pack(side='left', padx=10)
+        menu = CTkButton(master=button_frame, image=menu_img, text="Menu Management", fg_color="transparent", font=("Arial Bold", 25), hover_color="#207244", anchor="center", command=self.open_menu)
+        menu.pack(side='left', padx=10)
 
-employee_img_data = Image.open("employees.png")
-employee_img = CTkImage(dark_image=employee_img_data, light_image=employee_img_data, size=(100, 100))
+        employee_img_data = Image.open("employees.png")
+        employee_img = CTkImage(dark_image=employee_img_data, light_image=employee_img_data, size=(100, 100))
 
-employee = CTkButton(master=button_frame, image=employee_img, text="Employee Management", fg_color="transparent", font=("Arial Bold", 25), hover_color="#207244", anchor="center")
-employee.pack(side='left', padx=10)
+        employee = CTkButton(master=button_frame, image=employee_img, text="Employee Management", fg_color="transparent", font=("Arial Bold", 25), hover_color="#207244", anchor="center")
+        employee.pack(side='left', padx=10)
 
-inventory_img_data = Image.open("inventory_1.png")
-inventory_img = CTkImage(dark_image=inventory_img_data, light_image=inventory_img_data, size=(100, 100))
+        inventory_img_data = Image.open("inventory_1.png")
+        inventory_img = CTkImage(dark_image=inventory_img_data, light_image=inventory_img_data, size=(100, 100))
 
-inventory = CTkButton(master=button_frame, image=inventory_img, text="Inventory Management", fg_color="transparent", font=("Arial Bold", 25), hover_color="#207244", anchor="center")
-inventory.pack(side='left', padx=10)
+        inventory = CTkButton(master=button_frame, image=inventory_img, text="Inventory Management", fg_color="transparent", font=("Arial Bold", 25), hover_color="#207244", anchor="center")
+        inventory.pack(side='left', padx=10)
 
-# Create a new frame for the "Sales and Reports" button to place it on the next line
-sales_button_frame = CTkFrame(master=main_frame, fg_color="transparent")
-sales_button_frame.pack(pady=(20, 10), anchor="center")  # Adjusted padding for spacing
+        # Create a new frame for the "Sales and Reports" button to place it on the next line
+        sales_button_frame = CTkFrame(master=self.main_frame, fg_color="transparent")
+        sales_button_frame.pack(pady=(20, 10), anchor="center")  # Adjusted padding for spacing
 
-sales_img_data = Image.open("sales.png")
-sales_img = CTkImage(dark_image=sales_img_data, light_image=sales_img_data, size=(100, 100))
+        sales_img_data = Image.open("sales.png")
+        sales_img = CTkImage(dark_image=sales_img_data, light_image=sales_img_data, size=(100, 100))
 
-sales = CTkButton(master=sales_button_frame, image=sales_img, text="Sales and Reports", fg_color="transparent", font=("Arial Bold", 25), hover_color="#207244", anchor="center")
-sales.pack()
+        sales = CTkButton(master=sales_button_frame, image=sales_img, text="Sales and Reports", fg_color="transparent", font=("Arial Bold", 25), hover_color="#207244", anchor="center")
+        sales.pack()
+
+    def open_menu(self):
+        self.app.destroy()  # Destroy the current window
+        MenuFile()  # Call the menu function
+        exit(0)
+
+    def run(self):
+        self.app.mainloop()
 
 def connect_to_database(server, database):
     try:
@@ -64,7 +78,7 @@ def connect_to_database(server, database):
         return None
 
 if __name__ == "__main__":
-    server = 'DESKTOP-8RO21S6\SQLEXPRESS'
+    server = 'DESKTOP-DTNJB1H\\SQLEXPRESS'
     database = 'tastytrack'
 
     # Establish the database connection
@@ -72,7 +86,8 @@ if __name__ == "__main__":
 
     if connection is not None:
         try:
-            app.mainloop()
+            app = MainApp(connection)
+            app.run()
         finally:
             # Close the database connection
             connection.close()
